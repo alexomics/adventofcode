@@ -3,11 +3,7 @@ import fileinput
 
 def get_orbits(_orbits, planet):
     """Return number of orbits a given planet has"""
-    x = 0
-    while planet in _orbits:
-        planet = _orbits[planet]
-        x += 1
-    return x
+    return sum(1 for _ in path_to_root(_orbits, planet))
 
 
 def path_to_root(_orbits, planet):
