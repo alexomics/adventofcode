@@ -42,7 +42,7 @@ def part_1(s):
     ... J)K
     ... K)L'''
     >>> p, o = part_1([l for l in s.split('\\n')])
-    >>> sum({_p: get_orbits(o, _p) for _p in p}.values())
+    >>> sum(get_orbits(o, _p) for _p in p)
     42
     """
     # Make a dict of orbits: COM)B -> {B: COM}
@@ -51,7 +51,7 @@ def part_1(s):
     return planets, orbits
 
 
-def part_2(orbits, num_orbits, *args):
+def part_2(orbits, *args):
     """Solve aoc day 6 part 2
 
     Parameters
@@ -77,7 +77,7 @@ def part_2(orbits, num_orbits, *args):
     ... K)YOU
     ... I)SAN'''
     >>> p, o = part_1([l for l in s.split('\\n')])
-    >>> part_2(o, {_p: get_orbits(o, _p) for _p in p}, 'SAN', 'YOU')
+    >>> part_2(o, 'SAN', 'YOU')
     4
     """
     return len(set.symmetric_difference(*[set(path_to_root(orbits, a)) for a in args]))
@@ -87,6 +87,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     planets, orbits = part_1([l.strip() for l in fileinput.input()])
-    num_orbits = {p: get_orbits(orbits, p) for p in planets}
-    print(f"Part 1: {sum(num_orbits.values())}")
-    print(f"Part 2: {part_2(orbits, num_orbits, 'SAN', 'YOU')}")
+    print(f"Part 1: {sum(get_orbits(orbits, p) for p in planets)}")
+    print(f"Part 2: {part_2(orbits, 'SAN', 'YOU')}")
