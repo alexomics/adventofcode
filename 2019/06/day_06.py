@@ -18,7 +18,22 @@ def path_to_root(_orbits, planet):
 
 
 def part_1(s):
-    """
+    """Solve aoc day 6 part 1
+
+    Parameters
+    ----------
+    s : iterable
+        List of input lines
+
+    Returns
+    -------
+    planets : set
+        Set of all planets seen in the input file
+    orbits : dict
+        Dictionary of planet (key) and orbit (value)
+
+    Examples
+    --------
     >>> s = '''COM)B
     ... B)C
     ... C)D
@@ -41,7 +56,17 @@ def part_1(s):
 
 
 def part_2(orbits, num_orbits, *args):
-    """
+    """Solve aoc day 6 part 2
+
+    Parameters
+    ----------
+    orbits : dict
+    num_orbits : dict
+    args : str
+
+    Returns
+    -------
+    int
     >>> s = '''COM)B
     ... B)C
     ... C)D
@@ -59,9 +84,7 @@ def part_2(orbits, num_orbits, *args):
     >>> part_2(o, {_p: get_orbits(o, _p) for _p in p}, 'SAN', 'YOU')
     4
     """
-    i = [set(path_to_root(orbits, a)) for a in args]
-    m = max(num_orbits.get(planet) for planet in set.intersection(*i))
-    return sum(num_orbits.get(a, 0) for a in args) - 2 * m - 2
+    return len(set.symmetric_difference(*[set(path_to_root(orbits, a)) for a in args]))
 
 
 if __name__ == "__main__":
