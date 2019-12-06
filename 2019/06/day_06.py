@@ -23,8 +23,6 @@ def part_1(s):
 
     Returns
     -------
-    planets : set
-        Set of all planets seen in the input file
     orbits : dict
         Dictionary of planet (key) and orbit (value)
 
@@ -41,14 +39,12 @@ def part_1(s):
     ... E)J
     ... J)K
     ... K)L'''
-    >>> p, o = part_1([l for l in s.split('\\n')])
-    >>> sum(get_orbits(o, _p) for _p in p)
+    >>> o = part_1([l for l in s.split('\\n')])
+    >>> sum(get_orbits(o, _p) for _p in o)
     42
     """
     # Make a dict of orbits: COM)B -> {B: COM}
-    orbits = dict(tuple(reversed(l.split(")"))) for l in s)
-    planets = set(p for l in s for p in l.split(")"))
-    return planets, orbits
+    return dict(tuple(reversed(l.split(")"))) for l in s)
 
 
 def part_2(orbits, *args):
@@ -57,7 +53,6 @@ def part_2(orbits, *args):
     Parameters
     ----------
     orbits : dict
-    num_orbits : dict
     args : str
 
     Returns
@@ -76,7 +71,7 @@ def part_2(orbits, *args):
     ... K)L
     ... K)YOU
     ... I)SAN'''
-    >>> p, o = part_1([l for l in s.split('\\n')])
+    >>> o = part_1([l for l in s.split('\\n')])
     >>> part_2(o, 'SAN', 'YOU')
     4
     """
@@ -86,6 +81,6 @@ def part_2(orbits, *args):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    planets, orbits = part_1([l.strip() for l in fileinput.input()])
-    print(f"Part 1: {sum(get_orbits(orbits, p) for p in planets)}")
+    orbits = part_1([l.strip() for l in fileinput.input()])
+    print(f"Part 1: {sum(get_orbits(orbits, p) for p in orbits)}")
     print(f"Part 2: {part_2(orbits, 'SAN', 'YOU')}")
