@@ -33,9 +33,9 @@ for passport in lines:
                 (d["hgt"].endswith("cm") and 150 <= int(d["hgt"][:-2]) <= 193)
                 or (d["hgt"].endswith("in") and 59 <= int(d["hgt"][:-2]) <= 76)
             ),
-            bool(re.fullmatch(r"#[\da-f]{6}", d["hcl"])),
+            re.fullmatch("#[\da-f]{6}", d["hcl"]),
             d["ecl"] in colour,
-            bool(re.fullmatch("\d{9}", d["pid"])),
+            re.fullmatch("\d{9}", d["pid"]),
         ]
     )
 
