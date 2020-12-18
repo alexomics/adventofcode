@@ -36,7 +36,7 @@ def rev_eval(s):
 def parse(s, eval_):
     if "(" in s:
         for m in reversed(list(pat.finditer(s))):
-            s = s[: m.start()] + str(parse(m.group(1), eval_)) + s[m.end() :]
+            s = s[: m.start()] + str(eval_(m.group(1))) + s[m.end() :]
         return parse(s, eval_)
     return eval_(s)
 
