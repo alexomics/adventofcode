@@ -23,14 +23,14 @@ for pos in range(int_length):
     count_co2 = Counter([x[pos] for x in lines_co2])
 
     if count_o2["0"] > count_o2["1"]:
-        lines_o2 = [x for x in lines_o2 if x[pos] == "1"]
-    else:
         lines_o2 = [x for x in lines_o2 if x[pos] == "0"]
+    else:
+        lines_o2 = [x for x in lines_o2 if x[pos] == "1"]
 
     if count_co2["0"] > count_co2["1"]:
-        lines_co2 = [x for x in lines_co2 if x[pos] == "0"]
-    else:
         lines_co2 = [x for x in lines_co2 if x[pos] == "1"]
+    else:
+        lines_co2 = [x for x in lines_co2 if x[pos] == "0"]
 
     if lines_o2:
         o2 = lines_o2[0]
