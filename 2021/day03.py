@@ -1,26 +1,23 @@
 import sys
 from collections import Counter
 
-lines = [l.strip() for l in sys.stdin.readlines()]
-int_length = len(lines[0])
+lines = [l.strip() for l in sys.stdin]
 
-c = sum((Counter(x for x in enumerate(l)) for l in lines), start=Counter())
-gamma = []
-epsilon = []
-for pos in range(int_length):
-    if c[(pos, "0")] > c[(pos, "1")]:
-        gamma.append("0")
-        epsilon.append("1")
-    else:
-        gamma.append("1")
-        epsilon.append("0")
+# Transpose
+lines_t = [list(l) for l in zip(*lines)]
+g, e = [], []
+for pos in lines_t:
+    (g_bit, _), (e_bit, _) = Counter(pos).most_common(2)
+    g.append(g_bit)
+    e.append(e_bit)
 
-g = int("".join(gamma), 2)
-e = int("".join(epsilon), 2)
+g = int("".join(g), 2)
+e = int("".join(e), 2)
 print(f"Part 1: {g * e}")
 
 lines_o2 = lines[:]
 lines_co2 = lines[:]
+int_length = len(lines_t)
 for pos in range(int_length):
     count_o2 = Counter([x[pos] for x in lines_o2])
     count_co2 = Counter([x[pos] for x in lines_co2])
