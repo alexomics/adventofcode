@@ -1,7 +1,7 @@
 import sys
 
 
-def arithemtic_sum(n):
+def arithmetic_sum(n):
     return n * (n + 1) // 2
 
 
@@ -16,4 +16,4 @@ def solve(locs, f=lambda x: x):
 
 lines = [int(x) for x in sys.stdin.read().split(",")]
 print(f"Part 1: {solve(lines)}")
-print(f"Part 1: {solve(lines, arithemtic_sum)}")
+print(f"Part 1: {solve(lines, arithmetic_sum)}")
