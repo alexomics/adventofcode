@@ -20,8 +20,8 @@ table2 = {")": 1, "]": 2, "}": 3, ">": 4}
 
 def rec_re(s):
     for pat in good_pats:
-        if p := pat.search(s):
-            return rec_re(s[: p.start()] + s[p.end() :])
+        if pat.search(s):
+            return rec_re(pat.sub("", s))
     return s
 
 
@@ -31,13 +31,11 @@ for line in sys.stdin:
     if i := [table1.get(m.group()[-1], 0) for p in bad_pats if (m := p.search(res))]:
         illegals.extend(i)
     else:
-        s, q = deque(res), deque()
-        while s:
-            q.appendleft(rev[s.popleft()])
-        t = 0
+        total, q = 0, deque()
+        q.extendleft(res)
         while q:
-            t = (5 * t) + table2[q.popleft()]
-        scores.append(t)
+            total = (5 * total) + table2[rev[q.popleft()]]
+        scores.append(total)
 
 scores.sort()
 print(f"Part 1: {sum(illegals)}")
