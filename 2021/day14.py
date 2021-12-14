@@ -1,6 +1,7 @@
+import sys
 from collections import Counter
 
-poly, lines = open("day14.in").read().split("\n\n")
+poly, lines = sys.stdin.read().split("\n\n")
 d = dict(l.split(" -> ") for l in lines.split("\n"))
 
 # Count all pairs in initial string
