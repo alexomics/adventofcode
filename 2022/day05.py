@@ -1,6 +1,7 @@
 import sys
 import re
 from collections import deque
+from itertools import zip_longest
 
 pat = re.compile(r"\d+")
 s = sys.stdin.read()
@@ -8,23 +9,17 @@ start, moves = s.split("\n\n")
 
 
 def transpose(sequences):
-    m = max([len(v) for v in sequences])
-    matrix = [list(v) for v in sequences]
-    for seq in matrix:
-        seq.extend(list("#" * (m - len(seq))))
-    t_matrix = [[matrix[j][i] for j in range(len(matrix))] for i in range(m)]
-    return t_matrix
+    return list(map(list, zip_longest(*list(sequences), fillvalue=None)))
 
 
 def build_start(start):
     start = transpose(start.splitlines())
-    start = [l for l in start if not set(l).issubset(set(" []"))]
-    return {n: deque(list("".join(chars).lstrip())) for *chars, n in start}
+    return {n: deque("".join(chars).lstrip()) for *chars, n in start if n != " "}
 
 
 def rearrange(start, moves, part2=False):
     _start = build_start(start)
-    moves = list(map(pat.findall, moves.split("\n")))
+    moves = map(pat.findall, moves.split("\n"))
 
     for n, from_, to in moves:
         n = int(n)
