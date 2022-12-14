@@ -1,6 +1,12 @@
 import sys
 import re
-from itertools import pairwise
+from itertools import tee
+
+
+def pairwise(iterable):
+    a, b = tee(iterable)
+    next(b, None)
+    yield from zip(a, b)
 
 
 def yield_points(a, b):
@@ -36,28 +42,27 @@ min_y = min(y for _, y in walls)
 max_y = max(y for _, y in walls)
 sand = set()
 while True:
-    occupied = walls | sand
-    sand_x, sand_y = source
+    x, y = source
     while True:
-        if (sand_x, sand_y + 1) not in occupied:
+        if (x, y + 1) not in walls and (x, y + 1) not in sand:
             # Going down
-            sand_y += 1
-        elif (sand_x - 1, sand_y + 1) not in occupied:
+            y += 1
+        elif (x - 1, y + 1) not in walls and (x - 1, y + 1) not in sand:
             # Going left
-            sand_x -= 1
-            sand_y += 1
-        elif (sand_x + 1, sand_y + 1) not in occupied:
+            x -= 1
+            y += 1
+        elif (x + 1, y + 1) not in walls and (x + 1, y + 1) not in sand:
             # Going right
-            sand_x += 1
-            sand_y += 1
+            x += 1
+            y += 1
         else:
             # Stop
-            sand.add((sand_x, sand_y))
+            sand.add((x, y))
             break
 
-        if sand_y >= max_y:
+        if y >= max_y:
             break
-    if sand_y >= max_y:
+    if y >= max_y:
         break
 print("Part 1:", len(sand))
 
@@ -65,25 +70,24 @@ max_y += 2
 walls |= set(yield_points((min_x // 2, max_y), (max_x * 2, max_y)))
 sand = set()
 while source not in sand:
-    occupied = walls | sand
-    sand_x, sand_y = source
+    x, y = source
     while source not in sand:
-        if (sand_x, sand_y + 1) not in occupied:
+        if (x, y + 1) not in walls and (x, y + 1) not in sand:
             # Going down
-            sand_y += 1
-        elif (sand_x - 1, sand_y + 1) not in occupied:
+            y += 1
+        elif (x - 1, y + 1) not in walls and (x - 1, y + 1) not in sand:
             # Going left
-            sand_x -= 1
-            sand_y += 1
-        elif (sand_x + 1, sand_y + 1) not in occupied:
+            x -= 1
+            y += 1
+        elif (x + 1, y + 1) not in walls and (x + 1, y + 1) not in sand:
             # Going right
-            sand_x += 1
-            sand_y += 1
+            x += 1
+            y += 1
         else:
             # Stop
-            sand.add((sand_x, sand_y))
+            sand.add((x, y))
             break
 
-        if sand_y >= max_y:
+        if y >= max_y:
             break
 print("Part 2:", len(sand))
