@@ -22,7 +22,7 @@ for y, row in enumerate(s.splitlines(), start=-1):
             BLIZZARDS.add((x, y, c, *DIRS[c]))
 max_x = max(x for x, _ in WALLS)
 max_y = max(y for _, y in WALLS)
-# cap the start and end to limit the search
+# cap the start and end to limit the search and stop us going around the wall
 WALLS.add((0, -2))
 WALLS.add((max_x - 1, max_y + 1))
 start = (0, -1)
