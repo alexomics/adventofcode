@@ -1,16 +1,20 @@
 import sys
 
-data = {
-    int(l.split(": ")[0].split()[-1]): [
-        {d_.split()[-1]: int(d_.split()[0]) for d_ in d.split(", ")}
-        for d in l.split(": ")[1].split("; ")
-    ]
-    for l in sys.stdin.read().splitlines()
-}
+
+def parse(lines):
+    def f(s):
+        n, c = s.split()
+        return c, int(n)
+
+    for line in lines:
+        game, _, data = line.strip().partition(": ")
+        runs = (d.split(", ") for d in data.split("; "))
+        yield int(game.split()[-1]), [dict(map(f, run)) for run in runs]
+
 
 limits = {"red": 12, "green": 13, "blue": 14}
 p1, p2 = 0, 0
-for game, runs in data.items():
+for game, runs in parse(sys.stdin.read().splitlines()):
     impossbile = any(
         run.get(colour, 0) > limit for colour, limit in limits.items() for run in runs
     )
