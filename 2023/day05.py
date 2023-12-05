@@ -53,3 +53,38 @@ for seed in maps["seeds"]:
             locs.append(locs[-1])
     x.append(locs[-1])
 print(min(x))
+
+
+def f(ranges, maps):
+    ans = []
+    for r in maps:
+        new_ranges = []
+        while ranges:
+            (start, end) = ranges.pop()
+            before = (start, min(end, r.src.start))
+            inter = (max(start, r.src.start), min(r.src.stop, end))
+            after = (max(r.src.stop, start), end)
+            if before[1] > before[0]:
+                new_ranges.append(before)
+            if inter[1] > inter[0]:
+                ans.append(
+                    (
+                        inter[0] - r.src.start + r.dest.start,
+                        inter[1] - r.src.start + r.dest.start,
+                    )
+                )
+            if after[1] > after[0]:
+                new_ranges.append(after)
+        ranges = new_ranges
+    return ans + ranges
+
+
+res = []
+pairs = list(zip(maps["seeds"][::2], maps["seeds"][1::2]))
+for start, size in pairs:
+    # Create a single range [start, start + size)
+    ranges = [(start, start + size)]
+    for step in path:
+        ranges = f(ranges, maps[step])
+    res.append(min(ranges)[0])
+print(min(res))
