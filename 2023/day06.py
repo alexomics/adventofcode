@@ -13,6 +13,6 @@ def f(time, dist):
 
 time, dist = map(parse, sys.stdin)
 print(prod(starmap(f, zip(time, dist))))
-time = [int("".join(map(str, time)))]
-dist = [int("".join(map(str, dist)))]
-print(prod(starmap(f, zip(time, dist))))
+time = int("".join(map(str, time)))
+dist = int("".join(map(str, dist)))
+print(f(time, dist))
