@@ -1,22 +1,23 @@
 import sys
 import re
-from functools import reduce
+from functools import reduce, partial
 
 
-def HASH(curr, char):
+def H(curr, char):
     curr += ord(char)
     curr *= 17
     curr %= 256
     return curr
 
 
+HASH = partial(lambda it: reduce(H, it, 0))
 cmds = sys.stdin.read().strip().split(",")
-print(sum(reduce(HASH, c, 0) for c in cmds))
+print(sum(HASH(c) for c in cmds))
 
 box = {i: [] for i in range(256)}
 for cmd in cmds:
     name, op, v = re.split("(-|=)", cmd)
-    h = reduce(HASH, name, 0)
+    h = HASH(name)
     if op == "-":
         box[h] = [(lens, val) for lens, val in box[h] if lens != name]
     elif op == "=":
