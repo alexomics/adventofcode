@@ -36,16 +36,15 @@ def solve(grid, pos, end):
 
 
 def cheat(path, steps, saving=100):
-    shortcuts = set()
-    for i, p1 in enumerate(path, 0):
-        for j, p2 in enumerate(path[i + 1 :], i + 1):
-            if (m := manhattan_distance(p1, p2)) <= steps:
-                if j - i - m >= saving:
-                    shortcuts.add((p1, p2, m))
-    return shortcuts
+    return sum(
+        j - i - m >= saving
+        for i, p1 in enumerate(path)
+        for j, p2 in enumerate(path[i + 1 :], i + 1)
+        if (m := manhattan_distance(p1, p2)) <= steps
+    )
 
 
 path = solve(grid, start, end)
 pp1 = cheat(path, 2, 100)
 pp2 = cheat(path, 20, 100)
-print(len(pp1), len(pp2), sep="\n")
+print(pp1, pp2, sep="\n")
