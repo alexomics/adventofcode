@@ -1,9 +1,7 @@
 import sys
-from collections import deque, Counter
-from functools import cache
+from collections import Counter
 
 # fmt: off
-moves = {">": (1, 0), "v": (0, 1), "<": (-1, 0), "^": (0, -1)}
 numeric = {
     (0, 0): "7", (1, 0): "8", (2, 0): "9",
     (0, 1): "4", (1, 1): "5", (2, 1): "6",
@@ -20,9 +18,16 @@ directional.update({v: k for k, v in directional.items()})
 codes = sys.stdin.read().strip().splitlines()
 
 
-@cache
-def jump(grid_, curr, target):
-    grid = {0: numeric, 1: directional}[grid_]
+def pairwise(iterable):
+    # pairwise('ABCDEFG') → AB BC CD DE EF FG
+    iterator = iter(iterable)
+    a = next(iterator, None)
+    for b in iterator:
+        yield a, b
+        a = b
+
+
+def jump(grid, curr, target):
     cx, cy = curr
     tx, ty = target
     dx, dy = tx - cx, ty - cy
@@ -41,16 +46,20 @@ def jump(grid_, curr, target):
 p1, p2 = 0, 0
 for code in codes:
     n = int(code[:-1])
-    pads = deque(
-        [(0, numeric, (2, 3)), (1, directional, (2, 0)), (1, directional, (2, 0))]
-    )
-    while pads:
-        g_, g, pos = pads.popleft()
-        res = []
-        for char in code:
-            res.append(jump(g_, pos, g[char]))
-            pos = g[char]
-        code = "".join(res)
-    p1 += len(code) * n
+    pairs = pairwise(map(numeric.get, "A" + code))
+    code_ = Counter(["".join(jump(numeric, a, b) for a, b in pairs)])
+    for i in range(25):
+        new_code = Counter()
+        for steps, count in code_.items():
+            pairs = pairwise(map(directional.get, "A" + steps))
+            next_ = Counter(jump(directional, a, b) for a, b in pairs)
+            for k in next_:
+                next_[k] *= count
+            new_code.update(next_)
+
+        code_ = new_code
+        if i == 1:
+            p1 += sum(len(k) * v for k, v in code_.items()) * n
+    p2 += sum(len(k) * v for k, v in code_.items()) * n
 
 print(p1, p2, sep="\n")
